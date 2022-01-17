@@ -13,15 +13,15 @@ export class News extends Component {
     }
 
     async componentDidMount(){
-        let url = "https://newsapi.org/v2/top-headlines?country=in&apiKey=c6bcdcd9b1924d71a152a54cc34b1aa8&page=1";
+        let url = "https://newsapi.org/v2/top-headlines?country=in&apiKey=c6bcdcd9b1924d71a152a54cc34b1aa8&page=1&pageSize=20";
         let data = await fetch(url);
         let parsedData = await data.json();
-        this.setState({articles: parsedData.articles});
+        this.setState({articles: parsedData.articles, totalResults: parsedData.totalResults});
     }
 
     handlePrevClick = async ()=> {
         
-        let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=c6bcdcd9b1924d71a152a54cc34b1aa8&page=${this.state.page-1}`;
+        let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=c6bcdcd9b1924d71a152a54cc34b1aa8&page=${this.state.page-1}&pageSize=20`;
         let data = await fetch(url);
         let parsedData = await data.json();
 
@@ -36,7 +36,7 @@ export class News extends Component {
         
 
 
-        let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=c6bcdcd9b1924d71a152a54cc34b1aa8&page=${this.state.page+1}`;
+        let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=c6bcdcd9b1924d71a152a54cc34b1aa8&page=${this.state.page+1}&pageSize=20`;
         let data = await fetch(url);
         let parsedData = await data.json();
 
@@ -52,7 +52,7 @@ export class News extends Component {
         return (
             <>
             <div className="container my-3 d-flex justify-content-center ">
-                    <h2 className="font-weight-bold display-4">Today's Headlines</h2>
+                    <h2 className="font-weight-bold display-4 text-light" >Today's Headlines</h2>
             </div>
 
             <div className="row" >
@@ -65,8 +65,8 @@ export class News extends Component {
                 
                 <div className="container d-flex justify-content-between">
                     
-                    <button type="button" className="btn btn-dark" onClick={this.handlePrevClick}>&larr; Previous</button>
-                    <button type="button" className="btn btn-dark" onClick={this.handleNextClick}>Next &rarr;</button>
+                    <button type="button" className={`my-3 btn btn-danger ${this.state.page<=1?'invisible':'visible'}`} onClick={this.handlePrevClick}>&larr; Previous</button>
+                    <button type="button" className={`my-3 btn btn-danger ${(this.state.page+1)> (Math.ceil(this.state.totalResults/20))?'invisible':'visible'}`} onClick={this.handleNextClick}>Next &rarr;</button>
                 </div>
 
                 
