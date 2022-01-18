@@ -1,4 +1,4 @@
-# This is a News Web Application creayed with the help of React
+# This is a News Web Application created with the help of React
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

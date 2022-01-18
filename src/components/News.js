@@ -26,9 +26,9 @@ export class News extends Component {
     };
   }
 
-  async componentDidMount() {
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=c6bcdcd9b1924d71a152a54cc34b1aa8&page=1&pageSize=${this.props.pageSize}`;
+  async updateNews(){
     this.setState({ loading: true });
+    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=c6bcdcd9b1924d71a152a54cc34b1aa8&page=${this.state.page}&pageSize=${this.props.pageSize}`;
     let data = await fetch(url);
     let parsedData = await data.json();
     this.setState({
@@ -38,34 +38,18 @@ export class News extends Component {
     });
   }
 
-  handlePrevClick = async () => {
-    this.setState({ loading: true });
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=c6bcdcd9b1924d71a152a54cc34b1aa8&page=${
-      this.state.page - 1
-    }&pageSize=${this.props.pageSize}`;
-    let data = await fetch(url);
-    let parsedData = await data.json();
+  async componentDidMount() {
+    this.updateNews();
+  }
 
-    this.setState({
-      page: this.state.page - 1,
-      articles: parsedData.articles,
-      loading: false,
-    });
+  handlePrevClick = async () => {
+    this.setState({page : this.state.page-1});
+    this.updateNews();
   };
 
   handleNextClick = async () => {
-    this.setState({ loading: true });
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=c6bcdcd9b1924d71a152a54cc34b1aa8&page=${
-      this.state.page + 1
-    }&pageSize=${this.props.pageSize}`;
-    let data = await fetch(url);
-    let parsedData = await data.json();
-
-    this.setState({
-      page: this.state.page + 1,
-      articles: parsedData.articles,
-      loading: false,
-    });
+    this.setState({page : this.state.page+1});
+    this.updateNews();
   };
 
   render() {
@@ -100,6 +84,8 @@ export class News extends Component {
                       }
                       imageUrl={element.urlToImage}
                       newsUrl={element.url}
+                      author={element.source.name}
+                      date={element.publishedAt}
                     />
                   </div>
                 );
